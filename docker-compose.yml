@@ -1,0 +1,57 @@
+services:
+  nextjs_app:
+    build:
+      context: ./nextjs
+      dockerfile: Dockerfile
+    environment:
+      ENV_VARIABLE: development
+      NEXT_PUBLIC_ENV_VARIABLE: ${NEXT_PUBLIC_API_URL}
+    volumes:
+      - ./nextjs/src:/app/src
+      - ./nextjs/public:/app/public
+    restart: always      
+    ports:
+      - "3001:3001"
+    networks:
+      - f03ba9f3ef87d3eca5a52eb11dd054e4f4f605b71a4971a467551147c5f9d51c
+
+
+  nestjs_api:
+    build:
+      context: ./nestjs
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - PORT=3000
+      - NODE_ENV=development
+    volumes:
+      - ./nestjs:/usr/src/app/src
+    networks:
+      - f03ba9f3ef87d3eca5a52eb11dd054e4f4f605b71a4971a467551147c5f9d51c
+  
+  mysql_db:
+    image: mysql:latest
+    ports:
+      - "3306:3306"
+    container_name: mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: simrs
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root
+      MYSQL_TCP_PORT: 3306
+    volumes:
+      - b188fc83cb4f614749f43a5f0eb2ee30ad743416b0aa8afa44f619f3f7994417:/var/lib/mysql
+    networks:
+      - f03ba9f3ef87d3eca5a52eb11dd054e4f4f605b71a4971a467551147c5f9d51c
+
+volumes:
+  b188fc83cb4f614749f43a5f0eb2ee30ad743416b0aa8afa44f619f3f7994417:
+    external: true
+  
+
+networks:
+  f03ba9f3ef87d3eca5a52eb11dd054e4f4f605b71a4971a467551147c5f9d51c:
+    external: true
