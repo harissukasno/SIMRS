@@ -4,4 +4,4 @@
 # Ignore node_modules in nextjs directory
 ./nextjs/node_modules/
 ./nextjs/.node_modules/
-nextjs/.next/
+./nextjs/.next/
